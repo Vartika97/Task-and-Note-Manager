@@ -1,0 +1,135 @@
+#body-row {
+    margin-left:0;
+    margin-right:0;
+}
+#sidebar-container {
+    min-height: 100vh;   
+    background-color: #333;
+    padding: 0;
+}
+#mysidebar
+{
+  margin-top: 0px;
+  border: 1px solid black;
+  border-radius: 9px;
+  overflow: scroll;
+  height: 70%;
+  padding: 10px;
+}
+input[type="checkbox"]
+{
+  border: 2px solid #fff;
+  border-radius: 50%;
+  
+}
+
+
+/* start of popup form */
+.form-popup {
+    display: none;
+    position: fixed;
+    top: 31%;
+    width: 37%;
+    border: 3px solid #f1f1f1;
+    align-self: start;
+    height: 60%;
+    overflow-y: auto;
+    z-index: 9;
+  }
+
+  .details {
+    display: none;
+    position: fixed;
+    top: 31%;
+    width: 37%;
+    border: 3px solid #f1f1f1;
+    align-self: start;
+    height: 60%;
+    overflow-y: auto;
+    z-index: 8;
+  }
+  .form-container {
+    max-width: 100%;
+    padding: 10px;
+    background-color: white;
+  }
+  select
+  {
+    padding: 15px;
+    margin: 10px 20px 22px 20px;
+    border: none;
+    background: #f1f1f1;
+    width: 30%;
+    text-align: center;
+  }
+  /* Full-width input fields */
+  .form-container input[type=text], .form-container input[type=date], .form-container .select{
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    border: none;
+    background: #f1f1f1;
+  }
+  .form-container .btn {
+  
+    color: white;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    width: 50%;
+    height: 5%;
+    margin-bottom:10px;
+    opacity: 0.8;
+  }
+  .form-container .cancel{
+      background-color: red ;
+      width: 100%;
+  }
+  
+#addnewtask
+{
+  
+  width: 70%;
+  padding: 8px 14px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  font-size: large;
+}
+
+/* end of popup form*/
+.input-group
+{
+    align-items: center;
+    margin-top: 4%;
+    margin-left: 24%;
+    margin-right: 30%;
+}
+/* Sidebar sizes when expanded and expanded */
+.sidebar-expanded {
+    width: 230px;
+}
+.sidebar-collapsed {
+    width: 60px;
+}
+/* Menu item*/
+#sidebar-container .list-group a {
+    height: 50px;
+    color: white;
+}
+
+/* Closed submenu icon */
+#sidebar-container .list-group .list-group-item[aria-expanded="false"] .submenu-icon::after {
+  content: " \f0d7";
+  font-family: FontAwesome;
+  display: inline;
+  text-align: right;
+  padding-left: 10px;
+}
+
+.w3-bar-item{
+  margin-top: 10px;
+  margin-bottom: 10px;
+height: 10%;
+}
+
+
