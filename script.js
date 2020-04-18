@@ -3,7 +3,7 @@
 function gettodo()
 {
 $.get("/todolist",function(data,status,xhr) {
-  $('#ulTasks').empty();
+  $('#ulTasks tbody').empty();
    data.forEach(element => {
     
        if(element.status=="Incomplete")
