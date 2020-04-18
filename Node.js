@@ -67,13 +67,27 @@ catch(err){
    console.error(err)
    };
 
+var __dirname="C:/Users/vartikasingh/Documents/intro/Github"
+  //  app.use(express.static(__dirname + '/dist'));
+
+   app.get('/style.css', function(req, res) {
+    res.sendFile(__dirname + "/" + "style.css");
+  });
+  app.get('/script.js', function(req, res) {
+    res.sendFile(__dirname + "/" + "script.js");
+  });
+   // For all GET requests, send back index.html
+   app.get('/', function(req, res) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+     res.sendFile(__dirname+ '/index.html');
+   });
 // 1.Get all the list
 app.get('/todolist',function(req,res)
 {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
+     res.setHeader('Access-Control-Allow-Origin', '*');
+    // res.setHeader('Access-Control-Allow-Methods', 'GET');
+    // res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    // res.setHeader('Access-Control-Allow-Credentials', true);
     console.log("getit");
    
      Todos.findAll().then(function(todo)
@@ -87,8 +101,8 @@ app.get('/todolist',function(req,res)
 // 2.Get task Information of a task by Id
 app.get('/todolistandnotes/:id',function(req,res)
 {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+   res.header("Access-Control-Allow-Origin", "*");
+  // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     console.log("getit");
      Todos.findAll({where: 
       {
@@ -128,8 +142,8 @@ app.get('/todolistandnotes/:id',function(req,res)
 //3.Get task Information of a Notes by TaskId
 app.get('/todolistandnotes/:id/notes',function(req,res)
 {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+   res.header("Access-Control-Allow-Origin", "*");
+ // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     console.log("g   etit");
      Notes.findAll({where: 
       {
@@ -146,11 +160,11 @@ app.get('/todolistandnotes/:id/notes',function(req,res)
 //4.Store notes by Id
 app.post('/todolist/:id/notes',function(req,res)
 {
-    res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
-    res.setHeader('Access-Control-Allow-Methods', 'GET');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    console.log("getit");
+  res.setHeader('Access-Control-Allow-Origin', '*');
+    // res.setHeader('Access-Control-Allow-Methods', 'GET');
+    // res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    // res.setHeader('Access-Control-Allow-Credentials', true);
+    // console.log("getit");
     var parameters = req.body;
     console.log(req.body.Notes);
      Notes.create(
@@ -175,11 +189,11 @@ app.post('/todolist/:id/notes',function(req,res)
 //Store the task into database
 app.post('/todolist',function(req,res)
 {
-    res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
-    res.setHeader('Access-Control-Allow-Methods', 'POST');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    console.log("getit");
+     res.setHeader('Access-Control-Allow-Origin', '*');
+    // res.setHeader('Access-Control-Allow-Methods', 'POST');
+    // res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    // res.setHeader('Access-Control-Allow-Credentials', true);
+    // console.log("getit");
     var parameters = req.body;
     console.log(req.body);
     Todos.create(
@@ -206,10 +220,10 @@ app.post('/todolist',function(req,res)
 
 //To edit the Task attribute (Patch method was giving Cross Origin Error Even After Allowing Cross Origin...)
 app.post('/todos/:id',function(req,res){
-  res.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500");
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, POST, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-  res.setHeader('Access-Control-Allow-Credentials', true);  
+   res.setHeader("Access-Control-Allow-Origin", "*");
+  // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, POST, DELETE, OPTIONS');
+  // res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  // res.setHeader('Access-Control-Allow-Credentials', true);  
   var parameters= req.body;
  Todos.update (
     {
@@ -226,8 +240,9 @@ app.post('/todos/:id',function(req,res){
   {
     if(todo)
     {
-      
-         parameters.notes.forEach(function(element) {
+       console.log(parameters.notes);
+       if(parameters.notes!=undefined)
+        { parameters.notes.forEach(function(element) {
           console.log(element.id);
           Notes.update({
              note:element.note
@@ -240,6 +255,7 @@ app.post('/todos/:id',function(req,res){
              res.status(400).send("Can not add after"+element.note)
            })
          });
+        }
          res.json({msg:"task edited successfully"})
     }
       else
@@ -253,9 +269,9 @@ app.post('/todos/:id',function(req,res){
  //Change the status of todo
  app.get('/todolist/status/:id/:status',function(req,res)
 {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    console.log("getit");
+   res.header("Access-Control-Allow-Origin", "*");
+  // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  //   console.log("getit");
     Todos.update(
       {status:req.params.status},
       {
@@ -277,29 +293,26 @@ app.post('/todos/:id',function(req,res){
 //delete completed 
 app.get('/clear',function(req,res)
 {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+   res.header("Access-Control-Allow-Origin", "*");
+  // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
  
   Todos.destroy({
     where:{status:"complete"}
   }).then(function(todo)
   {
-    if(todo)
-    {
+    
       res.json({msg:"Successfully Deleted"});
-    }
-    else
-    {
-      res.status(400).send('Error')
-    }
+    
+
+    
   })
 });
 
 //Delete Note by NoteId
 app.get('/note/:id',function(req,res)
 {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+   res.header("Access-Control-Allow-Origin", "*");
+  // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
  
    Notes.destroy({
     where:{id:req.params.id}

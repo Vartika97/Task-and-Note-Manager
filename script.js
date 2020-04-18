@@ -3,8 +3,9 @@
 function gettodo()
 {
 $.get("http://127.0.0.1:8080/todolist/",function(data,status,xhr) {
+  $('#ulTasks').empty();
    data.forEach(element => {
-       
+    
        if(element.status=="Incomplete")
        {
           
@@ -29,28 +30,31 @@ alert("error"+ex);
 //Update the task in DB
 $(document).ready(function(){
     $("#edittask").click(function(){
-     alert("ente")
-    const id = document.getElementById("dataid").value;    
+     //alert("ente")
+    const id = document.getElementById("dataid").value;   
     const titlevalue=document.getElementById("titlename").value;
     const desvalue=document.getElementById("textarea").value;
     const datvalue=document.getElementById("editeddate").value;
     const priorityvalue =document.getElementById("Priority").value;
+    
     let notes=[];
     var i=0;
      var val=document.querySelectorAll('#unique');
      val.forEach(element=>{
        notes[i]={
-         id: element.getAttribute('data-id'),
+         id: parseInt(element.getAttribute('data-id')),
          note:element.value
        }
        console.log(notes[i].id+"  "+notes[i].note);
        i++
      })
 
-     alert("ready");
+ //    alert("ready");
    $.post("http://127.0.0.1:8080/todos/"+id,{Title:titlevalue,Description:desvalue,DueDate:datvalue,Priority:priorityvalue,notes:notes},function(data,status,xhr) {
     
-   alert(data.msg)
+   alert(data.msg);
+   document.getElementById("mySidebar").style.display = "none";
+   gettodo();
 
 }).fail(function(jqxhr, settings, ex)
 {
@@ -65,15 +69,21 @@ alert("error"+ex);
 //Implementation of Post Method To add task in the database
 $(document).ready(function(){
     $("#addtask").click(function(){
-   
    const titlevalue=document.getElementById("title").value;
+   if(titlevalue.trim()=="")
+   {
+     alert("Title can not be empty");
+     return;
+   }
    const desvalue=document.getElementById("Description").value;
    const datvalue=document.getElementById("due-date").value;
    const priorityvalue =document.getElementById("priority").value;
     
 
-    $.post("http://127.0.0.1:8080/todolist",{Title:titlevalue,Description:desvalue,DueDate:datvalue,Priority:priorityvalue,status:"Incomplete"},function(data,status,xhr) {
-                             console.log("output");            
+    $.post("http://127.0.0.1:8080/todolist",{Title:titlevalue.trim(),Description:desvalue.trim(),DueDate:datvalue,Priority:priorityvalue,status:"Incomplete"},function(data,status,xhr) {
+                             console.log("output");   
+                             document.getElementById("myForm").style.display = "none";
+                             gettodo();       
 			
         }).fail(function(jqxhr, settings, ex)
         {
@@ -83,10 +93,12 @@ $(document).ready(function(){
 });
 });
 
+//clear data
 function deletedata()
 {
      $.get("http://127.0.0.1:8080/clear",function(data,status,xhr) {
-        console.log("output");            
+        console.log("output");   
+        gettodo();         
 
 }).fail(function(jqxhr, settings, ex)
  {
@@ -106,6 +118,7 @@ function status(e)
    status="Incomplete";
    $.get("http://127.0.0.1:8080/todolist/status/"+id+"/"+status,function(data,status,xhr) {
     console.log(data.msg);
+    gettodo();
 }).fail(function(jqxhr, settings, ex)
 {
 alert("error"+ex);
@@ -118,6 +131,21 @@ function closeForm() {
   }
 function openForm()
 {
+  document.getElementById("title").value="";
+   document.getElementById("Description").value="";
+   const today = new Date();
+const tomorrow = new Date(today)
+ tomorrow.setDate(tomorrow.getDate() + 1)
+ var month=tomorrow.getMonth();
+ var date =tomorrow.getDate();
+    if(month<=9)
+    month="0"+(month+1);
+    console.log(date)
+    if(date<=9)
+     date="0"+date;
+    
+     document.getElementById("due-date").value=tomorrow.getFullYear()+"-"+month+"-"+date;
+   document.querySelector('#priority').options[1].selected = true;
     document.getElementById("myForm").style.display = "block";
 }
 function display()
@@ -133,6 +161,8 @@ function addNotes(e)
    let id=$(e.target).attr('data-id');
     var btn = document.getElementById("editnotes");
     btn.setAttribute("data-id",id);
+    document.getElementById("addtextarea").value="";
+
     document.getElementById("popupnote").style.marginLeft="30%"
    document.getElementById("popupnote").style.display="block";
 }
@@ -143,9 +173,13 @@ function addNotes(e)
 function StoreNote(e)
 {
     let  note =document.getElementById("addtextarea");
+    if(note.value.trim()=="")
+    return alert("Note Can not be Empty");
     $.post("http://127.0.0.1:8080/todolist/"+$(e.target).attr('data-id')+"/notes",{Notes:note.value.trim()},function(data,status,xhr) {
                              console.log("output");
-                             window.alert(data.msg);           
+                             document.getElementById("popupnote").style.display="none";
+                             window.alert(data.msg);  
+
 			
         }).fail(function(jqxhr, settings, ex)
         {
@@ -268,6 +302,8 @@ function deleteNote(e)
 {
   $.get("http://127.0.0.1:8080/note/"+$(e.target).attr('data-id'),function(data,status,xhr) {
       console.log(data.msg);
+      $(e.target).parent().parent().remove();
+      
 }).fail(function(jqxhr, settings, ex)
 {
 alert("error"+ex);
