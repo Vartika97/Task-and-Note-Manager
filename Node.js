@@ -77,7 +77,7 @@ var __dirname="C:/Users/vartikasingh/Documents/intro/Github"
     res.sendFile(__dirname + "/" + "script.js");
   });
    // For all GET requests, send back index.html
-   app.get('/', function(req, res) {
+   app.get('*', function(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
      res.sendFile(__dirname+ '/index.html');
    });
