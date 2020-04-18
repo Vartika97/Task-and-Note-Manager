@@ -2,7 +2,7 @@
 // Get All the Task when Load
 function gettodo()
 {
-$.get("http://127.0.0.1:8080/todolist/",function(data,status,xhr) {
+$.get("/todolist",function(data,status,xhr) {
   $('#ulTasks').empty();
    data.forEach(element => {
     
@@ -50,7 +50,7 @@ $(document).ready(function(){
      })
 
  //    alert("ready");
-   $.post("http://127.0.0.1:8080/todos/"+id,{Title:titlevalue,Description:desvalue,DueDate:datvalue,Priority:priorityvalue,notes:notes},function(data,status,xhr) {
+   $.post("/todos/"+id,{Title:titlevalue,Description:desvalue,DueDate:datvalue,Priority:priorityvalue,notes:notes},function(data,status,xhr) {
     
    alert(data.msg);
    document.getElementById("mySidebar").style.display = "none";
@@ -80,7 +80,7 @@ $(document).ready(function(){
    const priorityvalue =document.getElementById("priority").value;
     
 
-    $.post("http://127.0.0.1:8080/todolist",{Title:titlevalue.trim(),Description:desvalue.trim(),DueDate:datvalue,Priority:priorityvalue,status:"Incomplete"},function(data,status,xhr) {
+    $.post("/todolist",{Title:titlevalue.trim(),Description:desvalue.trim(),DueDate:datvalue,Priority:priorityvalue,status:"Incomplete"},function(data,status,xhr) {
                              console.log("output");   
                              document.getElementById("myForm").style.display = "none";
                              gettodo();       
@@ -96,7 +96,7 @@ $(document).ready(function(){
 //clear data
 function deletedata()
 {
-     $.get("http://127.0.0.1:8080/clear",function(data,status,xhr) {
+     $.get("/clear",function(data,status,xhr) {
         console.log("output");   
         gettodo();         
 
@@ -116,7 +116,7 @@ function status(e)
    status="complete";
    else
    status="Incomplete";
-   $.get("http://127.0.0.1:8080/todolist/status/"+id+"/"+status,function(data,status,xhr) {
+   $.get("/todolist/status/"+id+"/"+status,function(data,status,xhr) {
     console.log(data.msg);
     gettodo();
 }).fail(function(jqxhr, settings, ex)
@@ -175,7 +175,7 @@ function StoreNote(e)
     let  note =document.getElementById("addtextarea");
     if(note.value.trim()=="")
     return alert("Note Can not be Empty");
-    $.post("http://127.0.0.1:8080/todolist/"+$(e.target).attr('data-id')+"/notes",{Notes:note.value.trim()},function(data,status,xhr) {
+    $.post("/todolist/"+$(e.target).attr('data-id')+"/notes",{Notes:note.value.trim()},function(data,status,xhr) {
                              console.log("output");
                              document.getElementById("popupnote").style.display="none";
                              window.alert(data.msg);  
@@ -193,7 +193,7 @@ function StoreNote(e)
 //Function to Show PopUp form to Edit the Task Attributes
 function edit(e) 
 {
-    $.get("http://127.0.0.1:8080/todolistandnotes/"+$(e.target).attr('data-id'),function(data,status,xhr) {
+    $.get("/todolistandnotes/"+$(e.target).attr('data-id'),function(data,status,xhr) {
     document.getElementById("titlename").innerHTML=data.task[0].Title;
     document.getElementById("titlename").value=data.task[0].Title;
     document.getElementById("dataid").value=data.task[0].id;
@@ -300,7 +300,7 @@ console.log(B)
 
 function deleteNote(e)
 {
-  $.get("http://127.0.0.1:8080/note/"+$(e.target).attr('data-id'),function(data,status,xhr) {
+  $.get("/note/"+$(e.target).attr('data-id'),function(data,status,xhr) {
       console.log(data.msg);
       $(e.target).parent().parent().remove();
       
