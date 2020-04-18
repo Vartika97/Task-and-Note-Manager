@@ -67,7 +67,6 @@ catch(err){
    console.error(err)
    };
 
-var __dirname="C:/Users/vartikasingh/Documents/intro/Github"
   //  app.use(express.static(__dirname + '/dist'));
 
    app.get('/style.css', function(req, res) {
