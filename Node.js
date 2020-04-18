@@ -1,28 +1,28 @@
 var express = require('express');
-const bodyParser = require('body-parser');
-const sequelize =require('sequelize');
-const db = new sequelize({
+var sequelize =require('sequelize');
+var bodyParser = require('body-parser');
+var db = new sequelize({
     dialect: 'sqlite',
-    storage: __dirname + '/todoli.db',
-});
+    storage: __dirname + '/todoli.db'
+  });
 var app = express();
 app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(bodyParser.json({ type: 'application/json' }));
 
 //Table Created 
-const Todos = db.define('Todos', {
+var Todos = db.define('Todos', {
     id: {
       type: sequelize.INTEGER,
       primaryKey: true,
-      autoIncrement: true,
+      autoIncrement: true
     },
     Title:{
       type: sequelize.STRING(40),
-      allowNull: false,
+      allowNull: false
     },
     Description: {
         type: sequelize.STRING(1000),
-        allowNull: true,
+        allowNull: true
       },
     DueDate: {
       type: sequelize.DATE,   
@@ -35,10 +35,10 @@ const Todos = db.define('Todos', {
     status:{
       type:sequelize.STRING(20),
       allowNull:false
-    },
+    }
   });
   //Notes to store notes
-  const Notes = db.define('Notes', {
+  var Notes = db.define('Notes', {
      id:{
       type:sequelize.INTEGER,
      primaryKey:true,
@@ -54,25 +54,24 @@ const Todos = db.define('Todos', {
     note:{
     type:sequelize.STRING,
        allowNull:false
-    },
+    }
   }
     
   );
-   db.sync()
-  .then(() => {
+  try{
+db.sync().then(function(){
     console.log('db works');
-   
-
-  })
-  .catch((err) => {
-    console.error(err)
-  });
+})
+  }
+catch(err){
+   console.error(err)
+   };
 
 // 1.Get all the list
-app.get('/todolist',(req,res)=>
+app.get('/todolist',function(req,res)
 {
-    res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
-    res.setHeader('Access-Control-Allow-Methods', 'POST');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
     res.setHeader('Access-Control-Allow-Credentials', true);
     console.log("getit");
@@ -86,7 +85,7 @@ app.get('/todolist',(req,res)=>
 });
 
 // 2.Get task Information of a task by Id
-app.get('/todolistandnotes/:id',(req,res)=>
+app.get('/todolistandnotes/:id',function(req,res)
 {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -127,7 +126,7 @@ app.get('/todolistandnotes/:id',(req,res)=>
 
 
 //3.Get task Information of a Notes by TaskId
-app.get('/todolistandnotes/:id/notes',(req,res)=>
+app.get('/todolistandnotes/:id/notes',function(req,res)
 {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -145,7 +144,7 @@ app.get('/todolistandnotes/:id/notes',(req,res)=>
 });
 
 //4.Store notes by Id
-app.post('/todolist/:id/notes',(req,res)=>
+app.post('/todolist/:id/notes',function(req,res)
 {
     res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
     res.setHeader('Access-Control-Allow-Methods', 'GET');
@@ -157,7 +156,7 @@ app.post('/todolist/:id/notes',(req,res)=>
      Notes.create(
         {
             TaskId:req.params.id,
-            note:parameters.Notes,
+            note:parameters.Notes
         }
     ).then(function(notes)
     {
@@ -174,7 +173,7 @@ app.post('/todolist/:id/notes',(req,res)=>
 
 
 //Store the task into database
-app.post('/todolist',(req,res)=>
+app.post('/todolist',function(req,res)
 {
     res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
     res.setHeader('Access-Control-Allow-Methods', 'POST');
@@ -211,13 +210,13 @@ app.post('/todos/:id',function(req,res){
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, POST, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
   res.setHeader('Access-Control-Allow-Credentials', true);  
-  const parameters= req.body;
+  var parameters= req.body;
  Todos.update (
     {
             Title:parameters.Title,
             Description:parameters.Description,
             DueDate:parameters.DueDate,
-            Priority:parameters.Priority,
+            Priority:parameters.Priority
     },
     {where:{
        id:req.params.id
@@ -228,7 +227,7 @@ app.post('/todos/:id',function(req,res){
     if(todo)
     {
       
-         parameters.notes.forEach(element => {
+         parameters.notes.forEach(function(element) {
           console.log(element.id);
           Notes.update({
              note:element.note
@@ -252,7 +251,7 @@ app.post('/todos/:id',function(req,res){
  });
 
  //Change the status of todo
- app.get('/todolist/status/:id/:status',(req,res)=>
+ app.get('/todolist/status/:id/:status',function(req,res)
 {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -276,7 +275,7 @@ app.post('/todos/:id',function(req,res){
 });
 
 //delete completed 
-app.get('/clear',(req,res)=>
+app.get('/clear',function(req,res)
 {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -297,7 +296,7 @@ app.get('/clear',(req,res)=>
 });
 
 //Delete Note by NoteId
-app.get('/note/:id',(req,res)=>
+app.get('/note/:id',function(req,res)
 {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -316,6 +315,6 @@ app.get('/note/:id',(req,res)=>
     }
   })
 });
-app.listen(8080,"localhost",()=>{
+app.listen(8080,"localhost",function(){
     console.log("server is running");
 });
