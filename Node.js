@@ -77,7 +77,7 @@ app.get('/todolist',(req,res)=>
     res.setHeader('Access-Control-Allow-Credentials', true);
     console.log("getit");
    
-    Todos.findAll().then(function(todo)
+     Todos.findAll().then(function(todo)
     {
       res.json(todo);
     }
@@ -91,7 +91,7 @@ app.get('/todolistandnotes/:id',(req,res)=>
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     console.log("getit");
-    Todos.findAll({where: 
+     Todos.findAll({where: 
       {
       id:req.params.id
       }
@@ -99,7 +99,7 @@ app.get('/todolistandnotes/:id',(req,res)=>
     {
       if(todo)
       {
-      Notes.findAll({where: 
+     Notes.findAll({where: 
         {
         TaskId:req.params.id
         }
@@ -132,7 +132,7 @@ app.get('/todolistandnotes/:id/notes',(req,res)=>
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     console.log("g   etit");
-    Notes.findAll({where: 
+     Notes.findAll({where: 
       {
       TaskId:req.params.id
       }
@@ -154,7 +154,7 @@ app.post('/todolist/:id/notes',(req,res)=>
     console.log("getit");
     var parameters = req.body;
     console.log(req.body.Notes);
-    Notes.create(
+     Notes.create(
         {
             TaskId:req.params.id,
             note:parameters.Notes,
@@ -212,7 +212,7 @@ app.post('/todos/:id',function(req,res){
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
   res.setHeader('Access-Control-Allow-Credentials', true);  
   const parameters= req.body;
-  Todos.update (
+ Todos.update (
     {
             Title:parameters.Title,
             Description:parameters.Description,
@@ -227,8 +227,10 @@ app.post('/todos/:id',function(req,res){
   {
     if(todo)
     {
+      
          parameters.notes.forEach(element => {
-           Notes.update({
+          console.log(element.id);
+          Notes.update({
              note:element.note
            },
            {
@@ -300,7 +302,7 @@ app.get('/note/:id',(req,res)=>
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
  
-  Notes.destroy({
+   Notes.destroy({
     where:{id:req.params.id}
   }).then(function(notes)
   {
