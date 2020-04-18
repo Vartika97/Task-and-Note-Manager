@@ -328,6 +328,4 @@ app.get('/note/:id',function(req,res)
     }
   })
 });
-app.listen(8080,"localhost",function(){
-    console.log("server is running");
-});
+app.listen(8080);
